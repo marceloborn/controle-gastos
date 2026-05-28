@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Gastos</title>  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f2f5f9;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1f2937;
+    }
+
+    .saldo {
+      background: #16a34a;
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .saldo h2 {
+      font-size: 35px;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: #16a34a;
+      color: white;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #15803d;
+    }
+
+    .lista {
+      margin-top: 25px;
+    }
+
+    .gasto {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .valor {
+      color: red;
+      font-weight: bold;
+    }
+  </style></head>
+<body>  <div class="container">
+    <h1>Controle de Gastos</h1><div class="saldo">
+  <p>Saldo Atual</p>
+  <h2 id="saldo">R$ 0,00</h2>
+</div>
+
+<input type="number" id="valorInicial" placeholder="Digite o valor inicial">
+<button onclick="definirSaldo()">Salvar Valor Inicial</button>
+
+<br><br>
+
+<input type="text" id="descricao" placeholder="Onde gastou?">
+<input type="number" id="valorGasto" placeholder="Valor gasto">
+
+<button onclick="adicionarGasto()">Adicionar Gasto</button>
+
+<div class="lista" id="listaGastos"></div>
+
+  </div>  <script>
+    let saldo = 0;
+
+    function atualizarSaldo() {
+      document.getElementById('saldo').innerText =
+        'R$ ' + saldo.toFixed(2).replace('.', ',');
+    }
+
+    function definirSaldo() {
+      saldo = parseFloat(document.getElementById('valorInicial').value) || 0;
+      atualizarSaldo();
+    }
+
+    function adicionarGasto() {
+      const descricao = document.getElementById('descricao').value;
+      const valor = parseFloat(document.getElementById('valorGasto').value);
+
+      if (!descricao || !valor) {
+        alert('Preencha os campos!');
+        return;
+      }
+
+      saldo -= valor;
+      atualizarSaldo();
+
+      const lista = document.getElementById('listaGastos');
+
+      const item = document.createElement('div');
+      item.classList.add('gasto');
+
+      item.innerHTML = `
+        <div>
+          <strong>${descricao}</strong>
+        </div>
+        <div class="valor">- R$ ${valor.toFixed(2).replace('.', ',')}</div>
+      `;
+
+      lista.prepend(item);
+
+      document.getElementById('descricao').value = '';
+      document.getElementById('valorGasto').value = '';
+    }
+  </script></body>
+  </html>
