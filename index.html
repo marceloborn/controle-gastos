@@ -6,17 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Gastos</title>
     
-    <!-- Fonte Inter do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Ícones do FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-color: #f8f9fa;
+            --bg-color: #f1f5f9;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --green-bg: #f0fdf4;
@@ -29,7 +26,7 @@
             --red-text: #b91c1c;
             --red-btn: #ef4444;
             --border-color: #e2e8f0;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -42,11 +39,12 @@
         body {
             background: var(--bg-color);
             color: var(--text-main);
-            padding: 20px;
+            padding: 15px;
+            padding-bottom: 80px; /* Espaço para o botão flutuante */
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: auto;
         }
 
@@ -55,70 +53,68 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
+            margin-top: 10px;
         }
 
         .main-header .icon-bg {
-            background-color: var(--green-btn);
+            background-color: var(--text-main);
             color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         h1 {
-            font-size: 42px;
+            font-size: 28px;
             font-weight: 700;
         }
 
         /* Cards Superiores */
         .cards {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
         .card {
             flex: 1;
-            min-width: 280px;
-            padding: 25px;
+            min-width: 250px;
+            padding: 20px;
             border-radius: 16px;
             background: white;
             position: relative;
+            box-shadow: var(--card-shadow);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .card-header h2 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .card-header i {
-            font-size: 24px;
-        }
-
-        .valor {
-            font-size: 40px;
-            font-weight: 700;
             margin-bottom: 10px;
         }
 
-        .card p {
-            font-size: 14px;
-            font-weight: 500;
+        .card-header h2 {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-header i {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .valor {
+            font-size: 36px;
+            font-weight: 700;
         }
 
         .verde {
@@ -133,50 +129,213 @@
             color: var(--red-text);
         }
 
-        /* Caixas de Conteúdo */
+        /* Seção do Histórico (Agora é a principal) */
         .box {
             background: white;
-            padding: 30px;
             border-radius: 16px;
-            margin-bottom: 20px;
             border: 1px solid var(--border-color);
             box-shadow: var(--card-shadow);
+            overflow: hidden;
         }
 
         .box-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: #f8fafc;
+        }
+
+        .box-header-title {
+            display: flex;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 8px;
         }
 
-        .box-header i {
-            font-size: 20px;
-            color: var(--green-btn);
-        }
-
-        .box h3 {
-            font-size: 20px;
+        .box-header h3 {
+            font-size: 18px;
             font-weight: 600;
         }
 
-        .box > p {
+        .btn-config {
+            background: none;
+            border: none;
             color: var(--text-muted);
-            margin-bottom: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+
+        .btn-config:hover {
+            color: var(--text-main);
+        }
+
+        /* Lista de Gastos */
+        .lista {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lista-vazia {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-muted);
             font-size: 15px;
         }
 
-        /* Formulários */
-        .form-group {
+        .item {
             display: flex;
-            gap: 20px;
-            align-items: flex-end;
-            flex-wrap: wrap;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
         }
 
-        .input-wrapper {
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .item-detalhes {
             flex: 1;
-            min-width: 200px;
+        }
+
+        .item-desc {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .item-date {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .item-direita {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .item-value {
+            color: var(--red-text);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .btn-delete:hover {
+            color: var(--red-btn);
+        }
+
+        /* Botão Flutuante (Adicionar Gasto) */
+        .fab-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--green-btn);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(22, 163, 74, 0.4);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            z-index: 100;
+        }
+
+        .fab-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Janela Modal (Escondida por padrão) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 25px;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Formulários no Modal */
+        .input-wrapper {
+            margin-bottom: 15px;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -191,174 +350,52 @@
         input {
             width: 100%;
             padding: 14px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s;
+            background: #f8fafc;
+            transition: border-color 0.2s, background 0.2s;
         }
 
         input:focus {
             border-color: var(--green-btn);
+            background: white;
         }
 
-        button {
+        .btn-salvar {
             background: var(--green-btn);
             color: white;
             border: none;
-            padding: 14px 24px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            width: 100%;
+            margin-top: 10px;
             transition: background 0.2s;
-            height: 50px;
         }
 
-        button:hover {
+        .btn-salvar:active {
             background: var(--green-btn-hover);
         }
 
-        /* Tabela de Histórico */
-        .table-header {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1fr 50px;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-main);
+        /* Ocultar modais específicos */
+        .modal-body {
+            display: none;
         }
 
-        .lista {
-            display: flex;
-            flex-direction: column;
+        .modal-body.active {
+            display: block;
         }
 
-        .item {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1fr 50px;
-            padding: 15px 20px;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.2s;
-        }
-
-        .item:hover {
-            background: #f8fafc;
-        }
-
-        .item-desc {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .item-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-        }
-
-        .item-date {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .item-value {
-            color: var(--red-text);
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .btn-delete {
-            background: var(--red-btn);
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-        }
-
-        .btn-delete:hover {
-            background: #dc2626;
-        }
-
-        /* Rodapé da Tabela */
-        .table-footer {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 0 0 16px 16px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .table-footer .total-gasto-text { color: var(--red-text); }
-        .table-footer .saldo-atual-text { color: var(--green-text); }
-
-        /* Rodapé da Página */
-        .app-footer {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 40px;
-            color: var(--text-muted);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .app-footer i {
-            color: var(--green-btn);
-            font-size: 18px;
-        }
-
-        /* Responsividade */
-        @media(max-width: 768px) {
-            h1 { font-size: 32px; }
+        @media(max-width: 600px) {
+            .fab-button {
+                bottom: 20px;
+                right: 20px;
+            }
             .valor { font-size: 32px; }
-            .table-header { display: none; } /* Esconde o cabeçalho da tabela no celular */
-            
-            .item {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                position: relative;
-                padding-right: 50px;
-            }
-            
-            .item-desc { width: 100%; }
-            .item-date { width: 100%; font-size: 12px; }
-            .item-value { width: 100%; }
-            
-            .btn-delete {
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-
-            .table-footer {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
         }
     </style>
 </head>
@@ -369,11 +406,12 @@
 
     <div class="main-header">
         <div class="icon-bg">
-            <i class="fa-solid fa-arrow-trend-up"></i>
+            <i class="fa-solid fa-chart-pie"></i>
         </div>
-        <h1>Controle de Gastos</h1>
+        <h1>Financeiro</h1>
     </div>
 
+    <!-- Resumo -->
     <div class="cards">
         <div class="card verde">
             <div class="card-header">
@@ -381,7 +419,6 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <div class="valor" id="saldoDisplay">R$ 0,00</div>
-            <p>Valor que ainda tenho em caixa</p>
         </div>
 
         <div class="card vermelho">
@@ -390,88 +427,105 @@
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
             <div class="valor" id="totalGastoDisplay">R$ 0,00</div>
-            <p>Valor que já foi gasto</p>
         </div>
     </div>
 
+    <!-- Lista Organizada -->
     <div class="box">
         <div class="box-header">
-            <i class="fa-solid fa-circle-dollar-to-slot"></i>
-            <h3>Valor Inicial</h3>
-        </div>
-        <p>Informe quanto dinheiro você tem disponível para começar.</p>
-
-        <div class="form-group">
-            <div class="input-wrapper">
-                <input type="text" id="valorInicial" placeholder="Ex: 1000,00" onkeyup="formatarMoeda(this)">
+            <div class="box-header-title">
+                <i class="fa-solid fa-list-ul"></i>
+                <h3>Histórico de Gastos</h3>
             </div>
-            <button onclick="salvarValorInicial()">
-                <i class="fa-solid fa-floppy-disk"></i> Salvar Valor Inicial
+            <!-- Botão para abrir configuração de saldo inicial -->
+            <button class="btn-config" onclick="abrirModal('saldo')" title="Ajustar Saldo Inicial">
+                <i class="fa-solid fa-gear"></i>
             </button>
-        </div>
-    </div>
-
-    <div class="box">
-        <div class="box-header">
-            <i class="fa-solid fa-circle-plus"></i>
-            <h3>Adicionar Gasto</h3>
-        </div>
-        <p>Preencha os dados do gasto para adicionar à lista.</p>
-
-        <div class="form-group">
-            <div class="input-wrapper">
-                <label>Descrição do gasto</label>
-                <input type="text" id="descricao" placeholder="Ex: Almoço, Mercado, Combustível">
-            </div>
-            <div class="input-wrapper">
-                <label>Valor gasto</label>
-                <input type="text" id="valorGasto" placeholder="Ex: 50,00" onkeyup="formatarMoeda(this)">
-            </div>
-            <button onclick="adicionarGasto()">
-                <i class="fa-solid fa-plus"></i> Adicionar Gasto
-            </button>
-        </div>
-    </div>
-
-    <div class="box" style="padding: 0; overflow: hidden;">
-        <div class="box-header" style="padding: 25px 25px 10px 25px;">
-            <i class="fa-solid fa-list-check" style="color: var(--text-main);"></i>
-            <h3 style="color: var(--text-main);">Histórico de Gastos</h3>
-        </div>
-        
-        <div class="table-header">
-            <div>Descrição</div>
-            <div>Data e Hora</div>
-            <div>Valor</div>
-            <div></div>
         </div>
 
         <div class="lista" id="listaGastos">
-            <!-- Os itens vão aparecer aqui via JavaScript -->
-        </div>
-
-        <div class="table-footer">
-            <div>Total de gastos: <span class="total-gasto-text" id="footerTotalGasto">R$ 0,00</span></div>
-            <div>Saldo atual: <span class="saldo-atual-text" id="footerSaldo">R$ 0,00</span></div>
-        </div>
-    </div>
-
-    <div class="app-footer">
-        <i class="fa-solid fa-shield-halved"></i>
-        <div>
-            Seus dados ficam salvos automaticamente no seu navegador.<br>
-            Não se preocupe, nada é enviado para a internet.
+            <!-- Itens gerados via JS -->
         </div>
     </div>
 
 </div>
 
+<!-- Botão Flutuante -->
+<button class="fab-button" onclick="abrirModal('gasto')">
+    <i class="fa-solid fa-plus"></i>
+</button>
+
+<!-- Fundo Escuro do Modal -->
+<div class="modal-overlay" id="meuModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="tituloModal">Título</h3>
+            <button class="btn-close" onclick="fecharModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Formulário de Saldo Inicial (Escondido no modal) -->
+        <div class="modal-body" id="modalSaldo">
+            <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 14px;">
+                Informe o valor que você tem em caixa antes dos gastos.
+            </p>
+            <div class="input-wrapper">
+                <label>Valor em Caixa</label>
+                <input type="text" id="valorInicial" placeholder="Ex: 1000,00" onkeyup="formatarMoeda(this)" inputmode="numeric">
+            </div>
+            <button class="btn-salvar" onclick="salvarValorInicial()">Atualizar Saldo</button>
+        </div>
+
+        <!-- Formulário de Adicionar Gasto (Escondido no modal) -->
+        <div class="modal-body" id="modalGasto">
+            <div class="input-wrapper">
+                <label>O que você comprou?</label>
+                <input type="text" id="descricao" placeholder="Ex: Almoço, Material...">
+            </div>
+            <div class="input-wrapper">
+                <label>Qual o valor?</label>
+                <input type="text" id="valorGasto" placeholder="Ex: 50,00" onkeyup="formatarMoeda(this)" inputmode="numeric">
+            </div>
+            <button class="btn-salvar" onclick="adicionarGasto()">Registrar Gasto</button>
+        </div>
+
+    </div>
+</div>
+
 <script>
-    // Variáveis Globais
     let valorInicial = 0;
     let gastos = [];
 
-    // Formatação de Moeda no Input
+    // --- LÓGICA DO MODAL ---
+    function abrirModal(tipo) {
+        document.getElementById("meuModal").classList.add("active");
+        
+        // Esconde os dois formulários primeiro
+        document.getElementById("modalSaldo").classList.remove("active");
+        document.getElementById("modalGasto").classList.remove("active");
+
+        if(tipo === 'saldo') {
+            document.getElementById("tituloModal").innerText = "Ajustar Saldo Inicial";
+            document.getElementById("modalSaldo").classList.add("active");
+            document.getElementById("valorInicial").focus();
+        } else {
+            document.getElementById("tituloModal").innerText = "Novo Gasto";
+            document.getElementById("modalGasto").classList.add("active");
+            document.getElementById("descricao").focus();
+        }
+    }
+
+    function fecharModal() {
+        document.getElementById("meuModal").classList.remove("active");
+    }
+
+    // Fechar clicando fora da caixa
+    document.getElementById('meuModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            fecharModal();
+        }
+    });
+    // -----------------------
+
     function formatarMoeda(elemento) {
         let valor = elemento.value.replace(/\D/g, '');
         valor = (valor / 100).toFixed(2) + '';
@@ -480,69 +534,58 @@
         elemento.value = valor;
     }
 
-    // Converte string formatada (Ex: 1.000,50) para Float (1000.50)
     function parseMoeda(str) {
         if (!str) return 0;
         str = str.replace(/\./g, '').replace(',', '.');
         return parseFloat(str) || 0;
     }
 
-    // Formata Float para Moeda (Ex: R$ 1.000,50)
     function formatarParaReal(valor) {
         return "R$ " + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    // Identifica palavras-chave para colocar a cor e o ícone certo
     function obterEstiloIcone(descricao) {
         const desc = descricao.toLowerCase();
-        if (desc.includes('almoço') || desc.includes('comida') || desc.includes('lanche') || desc.includes('ifood')) {
-            return { icone: 'fa-utensils', cor: '#65a30d' }; // Verde limão
+        if (desc.includes('almoço') || desc.includes('comida') || desc.includes('lanche') || desc.includes('açai') || desc.includes('açaí')) {
+            return { icone: 'fa-utensils', cor: '#84cc16' }; 
         }
-        if (desc.includes('mercado') || desc.includes('compras')) {
-            return { icone: 'fa-cart-shopping', cor: '#0284c7' }; // Azul
+        if (desc.includes('mercado') || desc.includes('compras') || desc.includes('material')) {
+            return { icone: 'fa-cart-shopping', cor: '#0ea5e9' }; 
         }
-        if (desc.includes('combustível') || desc.includes('gasolina') || desc.includes('posto')) {
-            return { icone: 'fa-gas-pump', cor: '#f59e0b' }; // Laranja
+        if (desc.includes('combustível') || desc.includes('gasolina')) {
+            return { icone: 'fa-gas-pump', cor: '#f59e0b' }; 
         }
-        if (desc.includes('café') || desc.includes('padaria')) {
-            return { icone: 'fa-mug-hot', cor: '#9333ea' }; // Roxo
+        if (desc.includes('ferramenta') || desc.includes('peça') || desc.includes('madeira')) {
+            return { icone: 'fa-hammer', cor: '#64748b' }; 
         }
-        if (desc.includes('transporte') || desc.includes('uber') || desc.includes('ônibus')) {
-            return { icone: 'fa-bus', cor: '#0d9488' }; // Teal
-        }
-        return { icone: 'fa-tag', cor: '#64748b' }; // Cinza padrão
+        return { icone: 'fa-receipt', cor: '#8b5cf6' }; 
     }
 
-    // Carrega os dados do LocalStorage ao abrir a página
     function carregarDados() {
-        const dadosSalvos = localStorage.getItem('controleGastos');
-        const valorSalvo = localStorage.getItem('valorInicial');
+        const dadosSalvos = localStorage.getItem('appGastos');
+        const valorSalvo = localStorage.getItem('appValorInicial');
 
         if (dadosSalvos) gastos = JSON.parse(dadosSalvos);
         if (valorSalvo) {
             valorInicial = parseFloat(valorSalvo);
-            // Preenche o input caso tenha valor inicial salvo
             document.getElementById("valorInicial").value = valorInicial.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
         }
-
         atualizarTela();
     }
 
-    // Salva tudo no LocalStorage
     function salvarDados() {
-        localStorage.setItem('controleGastos', JSON.stringify(gastos));
-        localStorage.setItem('valorInicial', valorInicial.toString());
+        localStorage.setItem('appGastos', JSON.stringify(gastos));
+        localStorage.setItem('appValorInicial', valorInicial.toString());
     }
 
-    // Função do botão de Salvar Valor Inicial
     function salvarValorInicial() {
         const inputValor = document.getElementById("valorInicial").value;
         valorInicial = parseMoeda(inputValor);
         salvarDados();
         atualizarTela();
+        fecharModal();
     }
 
-    // Adiciona um novo gasto à lista
     function adicionarGasto() {
         const descricaoInput = document.getElementById("descricao");
         const valorInput = document.getElementById("valorGasto");
@@ -551,84 +594,75 @@
         const valor = parseMoeda(valorInput.value);
 
         if (!descricao || valor <= 0) {
-            alert("Preencha a descrição e o valor do gasto corretamente!");
+            alert("Por favor, preencha a descrição e um valor maior que zero.");
             return;
         }
 
         const data = new Date();
-        const dataFormatada = data.toLocaleDateString("pt-BR") + " " + data.toLocaleTimeString("pt-BR", {hour: '2-digit', minute:'2-digit'});
+        const dataFormatada = data.toLocaleDateString("pt-BR") + " às " + data.toLocaleTimeString("pt-BR", {hour: '2-digit', minute:'2-digit'});
 
-        const novoGasto = {
+        gastos.unshift({
             id: Date.now(),
             descricao: descricao,
             valor: valor,
             data: dataFormatada
-        };
-
-        // Adiciona no começo da lista (mais recentes primeiro)
-        gastos.unshift(novoGasto);
+        });
         
         salvarDados();
         atualizarTela();
 
-        // Limpa os campos
         descricaoInput.value = "";
         valorInput.value = "";
-        descricaoInput.focus();
+        fecharModal();
     }
 
-    // Deleta um gasto específico
     function deletarGasto(id) {
-        gastos = gastos.filter(gasto => gasto.id !== id);
-        salvarDados();
-        atualizarTela();
+        if(confirm("Tem certeza que deseja apagar este gasto?")) {
+            gastos = gastos.filter(gasto => gasto.id !== id);
+            salvarDados();
+            atualizarTela();
+        }
     }
 
-    // Atualiza todos os valores e a lista na tela
     function atualizarTela() {
         let totalGasto = 0;
-        
-        // Limpa a lista na tela
         const listaHtml = document.getElementById("listaGastos");
         listaHtml.innerHTML = "";
 
-        // Renderiza cada gasto e soma o total
+        if(gastos.length === 0) {
+            listaHtml.innerHTML = `<div class="lista-vazia">Nenhum gasto registrado ainda.</div>`;
+        }
+
         gastos.forEach(gasto => {
             totalGasto += gasto.valor;
-            
             const estilo = obterEstiloIcone(gasto.descricao);
             
             const div = document.createElement("div");
             div.className = "item";
             div.innerHTML = `
-                <div class="item-desc">
-                    <div class="item-icon" style="background-color: ${estilo.cor}">
-                        <i class="fa-solid ${estilo.icone}"></i>
-                    </div>
-                    ${gasto.descricao}
+                <div class="item-icon" style="background-color: ${estilo.cor}">
+                    <i class="fa-solid ${estilo.icone}"></i>
                 </div>
-                <div class="item-date">${gasto.data}</div>
-                <div class="item-value">- ${formatarParaReal(gasto.valor)}</div>
-                <button class="btn-delete" onclick="deletarGasto(${gasto.id})" title="Excluir">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
+                <div class="item-detalhes">
+                    <div class="item-desc">${gasto.descricao}</div>
+                    <div class="item-date">${gasto.data}</div>
+                </div>
+                <div class="item-direita">
+                    <div class="item-value">- ${formatarParaReal(gasto.valor)}</div>
+                    <button class="btn-delete" onclick="deletarGasto(${gasto.id})">
+                        <i class="fa-solid fa-trash-can"></i> Apagar
+                    </button>
+                </div>
             `;
             listaHtml.appendChild(div);
         });
 
-        // Calcula o Saldo Atual
         const saldoAtual = valorInicial - totalGasto;
 
-        // Atualiza os Textos nos Cards Superiores
         document.getElementById("saldoDisplay").innerText = formatarParaReal(saldoAtual);
         document.getElementById("totalGastoDisplay").innerText = formatarParaReal(totalGasto);
-
-        // Atualiza o Rodapé da Tabela
-        document.getElementById("footerTotalGasto").innerText = formatarParaReal(totalGasto);
-        document.getElementById("footerSaldo").innerText = formatarParaReal(saldoAtual);
     }
 
-    // Inicia a aplicação
     carregarDados();
 
 </script>
